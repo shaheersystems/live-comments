@@ -5,11 +5,11 @@ import { Card } from "./ui/card";
 
 type CommentType = {
   author: {
+    id: string;
     name: string;
-    avatar: string;
   };
-  comment: string;
-  created_at: string;
+  text: string;
+  createdAt: string;
 };
 
 type CommentBoxProps = {
@@ -22,17 +22,20 @@ const CommentBox = ({ data }: CommentBoxProps) => {
       <div>
         <div className="flex items-center gap-4">
           <Avatar>
-            <AvatarImage src={data.author.avatar} alt={data.author.name} />
+            <AvatarImage
+              src="https://api.dicebear.com/9.x/glass/svg"
+              alt={data.author.name}
+            />
           </Avatar>
           <h4 className="font-semibold">{data.author.name}</h4>
         </div>
         <div className="py-4">
-          <p className="text-gray-300 text-sm">{data.comment}</p>
+          <p className="text-gray-300 text-sm">{data.text}</p>
         </div>
         <div className="flex justify-between">
           <div>
             <time className="text-gray-300 text-xs">
-              Create At: {new Date(data.created_at).toDateString()}
+              Create At: {new Date(data.createdAt).toDateString()}
             </time>
           </div>
           <div className="flex items-center gap-2">

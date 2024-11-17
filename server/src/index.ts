@@ -2,15 +2,33 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import dotenv from "dotenv";
-import { initServer } from "./config/socket";
 import { router as userRouter } from "./routes/user";
+import { router as commentRouter } from "./routes/comment";
+import { Server } from "socket.io";
+import http from "http";
 
 dotenv.config();
 
 const app = express();
 
+app.use(express.json());
+
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*", // Update this to match your frontend origin
+    methods: ["GET", "POST"],
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("A user is connected");
+  socket.on("disconnect", () => {
+    console.log("A user disconnected.");
+  });
+});
 // initialize the server and socket
-const { server, io } = initServer(app);
+// const { server, io } = initServer(app);
 
 app.use(cors());
 app.use(morgan("dev"));
@@ -23,7 +41,10 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", userRouter);
+app.use("/api/comments", commentRouter);
 
 server.listen(port, () => {
-  console.log(`Server is running on port http://localhost:${port} 🚀`);
+  console.log(`Server is running on http://localhost:${port} 🚀`);
 });
+
+export { io };

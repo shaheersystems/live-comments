@@ -17,7 +17,7 @@ export const createUser = async (req: Request, res: Response) => {
     res.status(StatusCodes.CREATED).json({ token });
   } catch (error) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      message: "Internal Server",
+      message: "Internal Server" + error,
     });
   }
 };

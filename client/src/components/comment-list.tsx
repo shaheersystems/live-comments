@@ -1,12 +1,12 @@
 import CommentBox from "./comment-box";
+import { motion, AnimatePresence } from "framer-motion";
 type CommentType = {
   id: number;
-  comment: string;
-  created_at: string;
+  text: string;
+  createdAt: string;
   author: {
-    id: number;
+    id: string;
     name: string;
-    avatar: string;
   };
 };
 type CommentListProps = {
@@ -18,9 +18,20 @@ const CommentList = ({ comments }: CommentListProps) => {
       <div className="">
         <h2 className="text-lg font-semibold">Comments ({comments.length})</h2>
       </div>
-      {comments.map((comment) => (
-        <CommentBox key={comment.id} data={comment} />
-      ))}
+      <AnimatePresence initial={false}>
+        {comments.reverse().map((comment) => (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0, overflow: "hidden" }}
+            transition={{ type: "spring", bounce: 0, duration: 0.4 }}
+            key={comment.id}
+            className="relative"
+          >
+            <CommentBox key={comment.id} data={comment} />
+          </motion.div>
+        ))}
+      </AnimatePresence>
     </div>
   );
 };
